@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://DevanshTyagi04-s-workspace-d2j51h.ap-southeast-2.xata.sh/db/SnapCast",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}

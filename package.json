@@ -9,7 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@xata.io/client": "^0.0.0-next.v93343b9646f57a1e5c51c35eccf0767c2bb80baa",
+    "better-auth": "^1.4.4",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
     "next": "16.0.5",
+    "pg": "^8.16.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
@@ -19,6 +24,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "baseline-browser-mapping": "^2.8.32",
+    "drizzle-kit": "^0.31.7",
     "eslint": "^9",
     "eslint-config-next": "16.0.5",
     "tailwindcss": "^4",
