@@ -15,6 +15,7 @@ const page = async({ params}: Params) => {
   return (
     <main className='wrapper page'>
       <VideoDetailHeader {...video} userImg={user?.image} username={user?.name} ownerId={video.userId}/>
+      <div/>
       <section className="video-details">
         <div className="content">
           <VideoPlayer videoId={video.videoId}/>
