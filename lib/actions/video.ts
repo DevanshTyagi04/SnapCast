@@ -2,9 +2,10 @@
 
 import { headers } from "next/headers";
 import { auth } from "../auth";
-import { apiFetch, getEnv, withErrorHandling } from "../utils";
+import { apiFetch, doesTitleMatch, getEnv, getOrderByClause, withErrorHandling } from "../utils";
 import { BUNNY } from "@/constants";
 import { db } from "@/drizzle/db";
+import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { videos,user } from "@/drizzle/schema";
 import { revalidatePath } from "next/cache";
 import aj, { fixedWindow, request } from "../arcjet";
@@ -49,6 +50,15 @@ const validateWithArcjet = async (fingerprint: string) => {
     throw new Error('Rate Limit Exceeded');
   }
 }
+
+const buildVideoWithUserQuery = () =>
+  db
+    .select({
+      video: videos,
+      user: { id: user.id, name: user.name, image: user.image },
+    })
+    .from(videos)
+    .leftJoin(user, eq(videos.userId, user.id));
 
 // Server Actions
 export const getVideoUploadUrl = withErrorHandling(async () => {
@@ -111,5 +121,57 @@ export const saveVideoDetails = withErrorHandling(
 
     revalidatePaths(["/"]);
     return { videoId: videoDetails.videoId };
+  }
+);
+
+export const getAllVideos = withErrorHandling(async (
+  searchQuery: string = '',
+  sortFilter?: string,
+  pageNumber: number = 1,
+  pageSize: number = 8,
+) => {
+  const session = await auth.api.getSession({ headers: await headers() })
+  const currentUserId = session?.user.id;
+
+  const canSeeTheVideos = or(
+      eq(videos.visibility, 'public'),
+      eq(videos.userId, currentUserId!),
+  );
+
+  const whereCondition = searchQuery.trim()
+      ? and(
+          canSeeTheVideos,
+          doesTitleMatch(videos, searchQuery),
+      )
+      : canSeeTheVideos
+
+    // Count total for pagination
+    const [{ totalCount }] = await db
+      .select({ totalCount: sql<number>`count(*)` })
+      .from(videos)
+      .where(whereCondition);
+    const totalVideos = Number(totalCount || 0);
+    const totalPages = Math.ceil(totalVideos / pageSize);
+
+    // Fetch paginated, sorted results
+    const videoRecords = await buildVideoWithUserQuery()
+      .where(whereCondition)
+      .orderBy(
+        sortFilter
+          ? getOrderByClause(sortFilter)
+          : sql`${videos.createdAt} DESC`
+      )
+      .limit(pageSize)
+      .offset((pageNumber - 1) * pageSize);
+
+    return {
+      videos: videoRecords,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        totalVideos,
+        pageSize,
+      },
+    };
   }
 );
