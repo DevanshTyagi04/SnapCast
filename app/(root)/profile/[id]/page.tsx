@@ -19,20 +19,14 @@ const page = async ({ params,searchParams }: ParamsWithSearch) => {
         <Header subHeader={user?.email} title={user?.name} userImg={user?.image ?? ''}/>
         {videos?.length > 0 ? (
         <section className="video-grid">
-          {videos.map(({ video }) => (
-            <VideoCard
-              key={video.id}
-              id={video.videoId}
-              title={video.title}
-              thumbnail={video.thumbnailUrl}
-              createdAt={video.createdAt}
-              userImg={user.image ?? ""}
-              username={user.name ?? "Guest"}
-              views={video.views}
-              visibility={video.visibility}
-              duration={video.duration}
-            />
-          ))}
+          {videos.map(({ video, user }) => (
+              <VideoCard 
+                key={video.id} 
+                {...video} 
+                thumbnail={video.thumbnailUrl}
+                userImg={user?.image || ''} 
+                username={user?.name || 'Guest'} />
+            ))}
         </section>
       ) : (
         <EmptyState
