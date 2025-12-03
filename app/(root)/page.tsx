@@ -1,9 +1,9 @@
 import EmptyState from '@/components/EmptyState'
 import Header from '@/components/Header'
+import Pagination from '@/components/Pagination'
 import VideoCard from '@/components/VideoCard'
-import { dummyCards } from '@/constants'
 import { getAllVideos } from '@/lib/actions/video'
-import React from 'react'
+
 
 const Page = async({ searchParams }: SearchParams) => {
 
@@ -29,6 +29,14 @@ const Page = async({ searchParams }: SearchParams) => {
         </section>
       ):(
         <EmptyState icon="/assets/icons/video.svg" title="No Videos Found" description="Try adjusting your search" />
+      )}
+      {pagination?.totalPages > 1 && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          queryString={query}
+          filterString={filter}
+        />
       )}
     </main>
   )
