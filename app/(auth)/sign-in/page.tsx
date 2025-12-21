@@ -27,7 +27,7 @@ const page = () => {
                   full presentations, it&apos;s fast, smooth, and shareable in seconds
                 </p>
                 <article>
-                    <Image src="/assets/images/jason.png" alt="Devansh" width={64} height={64} className="rounded-full"/>
+                    <Image src="/assets/images/Devansh2.jpg" alt="Devansh" width={64} height={64} className="rounded-full"/>
                     <div>
                         <h2>
                             Devansh Tyagi
