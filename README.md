@@ -106,23 +106,22 @@ SnapCast was built following **production-grade best practices**:
 ## ▶️ How to Run the Project Locally
 
 ### 1. Clone the Repository
-```bash
+
 git clone https://github.com/DevanshTyagi04/SnapCast.git
 cd SnapCast
 
 ### 2. Install Dependencies
 
-```bash
 npm install
 
-3. Setup Environment Variables
+### 3. Setup Environment Variables
 
 Create a .env file in the root directory:
 
 DATABASE_URL=your_database_url
 ARCJET_KEY=your_arcjet_key
 
-4. Run the Development Server
+### 4. Run the Development Server
 npm run dev
 
 🎬 Demo
